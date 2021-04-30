@@ -10,7 +10,7 @@ resources:
 
 variables:
   tag: '$(Build.BuildNumber)'
-  imageName: 'srinath-chandra.TrivyContainerScanDemo'
+  imageName: 'srinath-chandra/TrivyContainerScanDemo'
 
 stages:
 - stage: Build
@@ -26,8 +26,8 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/ACRTasks/dockerfile'
-        tags: |
-          $(tag)
+        repository: '$(imageName)'
+        tags: '$(tag)'
     - task: CmdLine@2
       displayName: List Docker Images
       inputs:
