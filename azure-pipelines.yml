@@ -49,4 +49,4 @@ stages:
             wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
             sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
             trivy -v
-            trivy image --quiet --severity LOW,MEDIUM,HIGH,CRITICAL $(imageName):$(tag)         
+            trivy image --severity LOW,MEDIUM,HIGH,CRITICAL --no-progress $(imageName):$(tag)         
