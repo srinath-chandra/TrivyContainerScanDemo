@@ -10,7 +10,7 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  imageName: 'srinath-chandra/TrivyContainerScanDemo'
+  imageName: 'srinath-chandra.TrivyContainerScanDemo'
 
 stages:
 - stage: Build
