@@ -15,7 +15,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: 'ubuntu-latest'
     steps:
     - task: DownloadSecureFile@1
       displayName: Download Secure File
