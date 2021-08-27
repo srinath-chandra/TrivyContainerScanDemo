@@ -1,5 +1,5 @@
 trigger:
-  - master
+- master
 
 parameters:
 - name: file_name
@@ -11,14 +11,13 @@ parameters:
 pool:
   vmImage: ubuntu-latest
 steps:
-- ${{ if ne(parameters.file_name, '') }}:
-  - task: DownloadSecureFile@1
-    displayName: Download Secure File 
-    name: secureFileDownload
+- task: DownloadSecureFile@1
+  displayName: Download Secure File 
+  name: secureFileDownload
+  inputs:
+    secureFile: '${{ parameters.file_name }}'
+- task: CmdLine@2
+    displayName: Display file
     inputs:
-      secureFile: '${{ parameters.file_name }}'
-  - task: CmdLine@2
-      displayName: Display file
-      inputs:
-        script: |
-          cat TestFile.txt
+      script: |
+        cat TestFile.txt
