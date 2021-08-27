@@ -18,8 +18,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: DownloadSecureFile@1
-      displayName: Download Secure File 
-      name: secureFileDownload
+      displayName: Download Secure File
       inputs:
         secureFile: 'TestFile.txt'
     - task: CmdLine@2
