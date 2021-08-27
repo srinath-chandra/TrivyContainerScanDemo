@@ -1,18 +1,16 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
 trigger:
 - master
 
 resources:
 - repo: self
 
-parameters:
-- name: file_name
-  type: string
-  default: ''
-  values:
-    - TestFile.txt
 stages:
 - stage: Build
-  displayName: Check secure files
+  displayName: Build image
   jobs:
   - job: Build
     displayName: Build
@@ -23,7 +21,7 @@ stages:
       displayName: Download Secure File 
       name: secureFileDownload
       inputs:
-        secureFile: '${{ parameters.file_name }}'
+        secureFile: 'TestFile.txt'
     - task: CmdLine@2
       displayName: Display file
       inputs:
