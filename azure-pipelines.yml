@@ -25,4 +25,4 @@ stages:
       displayName: Display file
       inputs:
         script: |
-          cat TestFile.txt
+          cat /home/vsts/work/_temp/TestFile.txt
