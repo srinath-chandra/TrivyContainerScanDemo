@@ -8,6 +8,11 @@ trigger:
 resources:
 - repo: self
 
+variables:
+  tag: '$(Build.BuildNumber)'
+  imageName: 'srinath-chandra/trivycontainerscandemo'
+  trivyVersion: 0.17.1
+
 stages:
 - stage: Build
   displayName: Build image
@@ -15,14 +20,33 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: ubuntu-latest
     steps:
-    - task: DownloadSecureFile@1
-      displayName: Download Secure File
+    - task: Docker@2
+      displayName: Build an image
       inputs:
-        secureFile: 'TestFile.txt'
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/ACRTasks/dockerfile'
+        repository: '$(imageName)'
+        tags: '$(tag)'
     - task: CmdLine@2
-      displayName: Display file
+      displayName: List Docker Images
       inputs:
         script: |
-          cat /home/vsts/work/_temp/TestFile.txt
+         docker images
+    - task: CmdLine@2
+      displayName: Scan
+      inputs:
+        script: |
+         docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 0 --severity LOW,MEDIUM,HIGH,CRITICAL --ignore-unfixed $(imageName):$(tag)
+         
+         #docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 1 --severity CRITICAL --ignore-unfixed $(imageName):$(tag)
+    - task: CmdLine@2
+      displayName: "Download and Run trivy scan"
+      inputs:
+        script: |
+            sudo apt-get install rpm
+            wget -q https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
+            sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
+            trivy -v
+            trivy image --severity LOW,MEDIUM,HIGH,CRITICAL --no-progress $(imageName):$(tag)
